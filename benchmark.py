@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import subprocess
+import resource
 import sys
 import os
 
@@ -16,15 +17,20 @@ def benchmark_tool_feature(tool, feat, models, outfolder):
     print('# {:^60} #'.format('%s:%s' % (tool,feat)))
     print("==" * 32)
     
-    for model in models:
-        # TODO: skip multivalued models for Boolean tools
-        if False: continue
-        
-        model_name = '__'.join(model.split('/'))
-        with open( os.path.join(outfolder, '%s.output' % model_name), 'w' ) as outfile:
-            print('*', model)
-            subprocess.run( (launcher,model), stdout=outfile )
-            # TODO: check results for relevant features
+    with open( os.path.join(outfolder, 'timings.txt'), 'w' ) as timingfile:
+        for model in models:
+            # TODO: skip multivalued models for Boolean tools
+            if False: continue
+            
+            model_name = '__'.join(model.split('/'))
+            with open( os.path.join(outfolder, '%s.output' % model_name), 'w' ) as outfile:
+                print('*', model)
+                usage_start = resource.getrusage(resource.RUSAGE_CHILDREN)
+                subprocess.run( (launcher,model), stdout=outfile )
+                usage_end = resource.getrusage(resource.RUSAGE_CHILDREN)
+                cpu_time = usage_end.ru_utime - usage_start.ru_utime
+                timingfile.write('%s\t%s\n' % (model_name,cpu_time))
+                # TODO: check results for relevant features
     
     print()
 
