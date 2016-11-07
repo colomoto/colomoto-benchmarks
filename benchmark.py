@@ -117,6 +117,12 @@ if __name__ == '__main__':
 
     models = load_models()
     runfolder = 'runs'
+
+    print(selected_features)
+
+    
     run_benchmarks(selected_features, models, runfolder)
+
+    
 
 
