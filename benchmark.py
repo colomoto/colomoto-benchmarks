@@ -9,6 +9,34 @@ import os
 
 TIMEOUT=2000
 
+def subprocess_run(commands, outfile, timeout):
+    # hannes doesn't have python 3.5 hence can't use subprocess.run :)
+    
+    process = subprocess.Popen(commands, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    #process.stdin.close()
+    output, error = process.communicate(timeout=timeout)
+    output = output.decode()
+    outfile.write(output)
+
+
+def accepts_multivalues(tool):
+    with open(os.path.join('tools', tool, 'config.txt')) as f:
+        for line in f.readlines():
+            key, value = line.split(':')
+            value = value.strip()
+            key = key.strip()
+            if key=='multivalued':
+                assert(value in ['true','false'])
+                return value=='true'
+
+    print('config.txt of %s doesnt contain "multivalued"')
+    raise Exception
+
+
+def is_multivalued(model):
+    return '.sbml' in model
+    
+
 def benchmark_tool_feature(tool, feat, models, outfolder):
     launcher = os.path.join('tools', tool, 'features', feat)
     if not os.path.exists( launcher): return
@@ -17,20 +45,23 @@ def benchmark_tool_feature(tool, feat, models, outfolder):
     print("==" * 32)
     print('# {:^60} #'.format('%s:%s' % (tool,feat)))
     print("==" * 32)
+
+    tool_accepts_multi = accepts_multivalues(tool)
     
     with open( os.path.join(outfolder, 'timings.txt'), 'w' ) as timingfile:
         for model in models:
-            # TODO: skip multivalued models for Boolean tools
-            if False: continue
+            
+            if is_multivalued(model) and not tool_accepts_multi: continue
             
             model_name = '__'.join(model.split('/'))
             with open( os.path.join(outfolder, '%s.output' % model_name), 'w' ) as outfile:
                 print('*', model)
                 usage_start = resource.getrusage(resource.RUSAGE_CHILDREN)
-                subprocess.run( (launcher,model), stdout=outfile, timeout=TIMEOUT )
+                subprocess_run(commands=(launcher,model), outfile=outfile, timeout=TIMEOUT)
                 usage_end = resource.getrusage(resource.RUSAGE_CHILDREN)
                 cpu_time = usage_end.ru_utime - usage_start.ru_utime
                 timingfile.write('%s\t%s\n' % (model_name,cpu_time))
+                
                 # TODO: should we detect timeout triggers and error codes?
                 # TODO: check results for relevant features
     
@@ -71,6 +102,7 @@ def add_tool(selected, tool):
     if not os.path.exists( feature_folder): return
 
     for feat in os.listdir( os.path.join('tools', tool, 'features')):
+        if '~' in feat: continue
         add_tool_feature(selected, tool, feat)
 
 
@@ -117,9 +149,6 @@ if __name__ == '__main__':
 
     models = load_models()
     runfolder = 'runs'
-
-    print(selected_features)
-
     
     run_benchmarks(selected_features, models, runfolder)
 
