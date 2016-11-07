@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo "TODO: actually launch PyBoolNet!!!"
+python tools/PyBoolNet/source/stablestates.py $1
 
