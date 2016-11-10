@@ -75,9 +75,8 @@ def load_models(folder='models'):
     return models
 
 
-def run_benchmarks(selected, models, runfolder):
-    #TODO: obtain a new run output folder
-    this_runfolder = os.path.join(runfolder, 'test')
+def run_benchmarks(selected, models, runfolder, name):
+    this_runfolder = os.path.join(runfolder, name)
     if not os.path.exists(this_runfolder): os.makedirs(this_runfolder)
     
     done = set()
@@ -96,6 +95,7 @@ def add_tool_feature(selected, tool, feat):
     launcher = os.path.join('tools', tool, 'features', feat)
     if not os.path.exists( launcher): return
     selected.append((tool,feat))
+
 
 def add_tool(selected, tool):
     feature_folder = os.path.join('tools', tool, 'features')
@@ -116,7 +116,6 @@ def add_all(selected):
         add_tool(selected, tool)
 
 
-
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) == 0:
@@ -125,11 +124,19 @@ if __name__ == '__main__':
         print('  tool           all features of a specific tool')
         print('  tool:feature   a specific features of a tool')
         print('  :feature       all instances of a specific feature')
+
+
+
+    models = load_models()
+    runfolder = 'runs'
     
-    selected_features = []
     for arg in args:
+        
+        selected_features = []
+
         if arg == 'ALL':
             add_all(selected_features)
+            run_benchmarks(selected_features, models, runfolder, arg)
             continue
         
         target = arg.split(':', 1)
@@ -147,10 +154,7 @@ if __name__ == '__main__':
         elif feat:
             add_feature(selected_features, feat)
 
-    models = load_models()
-    runfolder = 'runs'
-    
-    run_benchmarks(selected_features, models, runfolder)
+        run_benchmarks(selected_features, models, runfolder, arg)
 
     
 
