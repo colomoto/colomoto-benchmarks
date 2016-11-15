@@ -95,3 +95,6 @@ ENV/
 
 # run output folder
 runs/**
+
+# local installation folder
+local/**

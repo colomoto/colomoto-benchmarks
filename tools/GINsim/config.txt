@@ -1,3 +1,0 @@
-multivalued: true
-format: sbml
-source: http://ginsim.org/sites/default/files/ginsim-dev/GINsim-2.9.4-SNAPSHOT-jar-with-dependencies.jar

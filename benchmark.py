@@ -4,10 +4,32 @@ from __future__ import print_function
 
 import subprocess
 import resource
+import imp
 import sys
 import os
 
 TIMEOUT=2000
+
+def load_tools(folder='tools'):
+    tools = {}
+    basedir = os.path.join( os.path.dirname(__file__), folder )
+    module = sys.modules[__name__]
+    
+    for name in os.listdir(basedir):
+        if not name.endswith(".py") and not name.startswith("_"):
+            try:
+                filepath = os.path.join(basedir, name, 'config.py')
+                py_mod = imp.load_source('tools.%s' % name, filepath)
+                
+                if not py_mod.is_installed:
+                    print(name, 'is not installed')
+                    continue
+                tools[name] = py_mod
+                print('loaded ', name)
+            except:
+                print("Error loading "+name)
+    
+    return tools
 
 def subprocess_run(commands, outfile, timeout):
     # hannes doesn't have python 3.5 hence can't use subprocess.run :)
@@ -17,20 +39,6 @@ def subprocess_run(commands, outfile, timeout):
     output, error = process.communicate(timeout=timeout)
     output = output.decode()
     outfile.write(output)
-
-
-def accepts_multivalues(tool):
-    with open(os.path.join('tools', tool, 'config.txt')) as f:
-        for line in f.readlines():
-            key, value = line.split(':')
-            value = value.strip()
-            key = key.strip()
-            if key=='multivalued':
-                assert(value in ['true','false'])
-                return value=='true'
-
-    print('config.txt of %s doesnt contain "multivalued"')
-    raise Exception
 
 
 def is_multivalued(model):
@@ -46,7 +54,7 @@ def benchmark_tool_feature(tool, feat, models, outfolder):
     print('# {:^60} #'.format('%s:%s' % (tool,feat)))
     print("==" * 32)
 
-    tool_accepts_multi = accepts_multivalues(tool)
+    tool_accepts_multi = tools[tool].multivalued
     
     with open( os.path.join(outfolder, 'timings.txt'), 'w' ) as timingfile:
         for model in models:
@@ -124,9 +132,10 @@ if __name__ == '__main__':
         print('  tool           all features of a specific tool')
         print('  tool:feature   a specific features of a tool')
         print('  :feature       all instances of a specific feature')
+        sys.exit()
 
 
-
+    tools = load_tools('tools')
     models = load_models()
     runfolder = 'runs'
     
@@ -155,7 +164,5 @@ if __name__ == '__main__':
             add_feature(selected_features, feat)
 
         run_benchmarks(selected_features, models, runfolder, arg)
-
-    
 
 
