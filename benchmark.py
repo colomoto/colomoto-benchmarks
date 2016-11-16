@@ -24,6 +24,20 @@ def load_tools(folder='tools'):
                 if not py_mod.is_installed:
                     print(name, 'is not installed')
                     continue
+                
+                # Load associated features
+                feature_dir = os.path.join(basedir, name, 'features')
+                features = {}
+                py_mod.features = features
+                if os.path.exists(feature_dir):
+                    for feat in os.listdir(feature_dir):
+                        if '~' in feat: continue
+                        features[feat] = os.path.join(feature_dir, feat)
+                
+                if not features:
+                    print(name, 'has no feature')
+                    continue
+                
                 tools[name] = py_mod
                 print('loaded ', name)
             except:
@@ -43,10 +57,13 @@ def subprocess_run(commands, outfile, timeout):
 
 def is_multivalued(model):
     return '.sbml' in model
-    
+
 
 def benchmark_tool_feature(tool, feat, models, outfolder):
-    launcher = os.path.join('tools', tool, 'features', feat)
+    if tool not in tools: return
+    tool_features = tools[tool].features
+    if feat not in tool_features: return
+    launcher = tool_features[feat]
     if not os.path.exists( launcher): return
     if not os.path.exists(outfolder): os.makedirs(outfolder)
     
@@ -100,34 +117,34 @@ def run_benchmarks(selected, models, runfolder, name):
 
 
 def add_tool_feature(selected, tool, feat):
-    launcher = os.path.join('tools', tool, 'features', feat)
-    if not os.path.exists( launcher): return
-    selected.append((tool,feat))
+    if tool in tools and feat in tools[tool].features:
+        selected.append((tool,feat))
 
 
 def add_tool(selected, tool):
-    feature_folder = os.path.join('tools', tool, 'features')
-    if not os.path.exists( feature_folder): return
+    if tool not in tools: return
 
-    for feat in os.listdir( os.path.join('tools', tool, 'features')):
+    for feat in tools[tool].features:
         if '~' in feat: continue
         add_tool_feature(selected, tool, feat)
 
 
 def add_feature(selected, feat):
-    for tool in os.listdir("tools"):
+    for tool in tools:
         add_tool_feature(selected, tool, feat)
 
 
 def add_all(selected):
-    for tool in os.listdir("tools"):
+    for tool in tools:
         add_tool(selected, tool)
+
 
 
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) == 0:
         print('Usage: %s [list of targets]')
+        print('  LIST           list available tools and their features')
         print('  ALL            benchmark everything')
         print('  tool           all features of a specific tool')
         print('  tool:feature   a specific features of a tool')
@@ -143,6 +160,13 @@ if __name__ == '__main__':
         
         selected_features = []
 
+        if arg == 'LIST':
+            for tool in tools:
+                print(tool)
+                for feat in tools[tool].features:
+                    print('   ', feat)
+            continue
+        
         if arg == 'ALL':
             add_all(selected_features)
             run_benchmarks(selected_features, models, runfolder, arg)
