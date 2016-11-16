@@ -54,8 +54,13 @@ def read_data(PathToJob, Ordering):
     """
     reads the results file ("timings.txt") of a particular job
     """
+
+    path_to_timings = os.path.join(PathToJob,"timings.txt")
+
+    if not os.path.exists(path_to_timings):
+        return None
     
-    with open(os.path.join(PathToJob,"timings.txt"), "r") as f:
+    with open(path_to_timings, "r") as f:
         data = f.readlines()
 
     data = [x.split() for x in data]
@@ -93,7 +98,10 @@ if __name__=="__main__":
 
             data = read_data(os.path.join("runs",run,job), tick_names)
 
-            matplotlib.pyplot.plot(tick_numbers, data, label=tool, marker='o', linewidth=3)
+            if data:
+                matplotlib.pyplot.plot(tick_numbers, data, label=tool, marker='o', linewidth=3)
+            else:
+                print('  missing "timings.txt" for %s %s'%(tool,feature))
             
 
             print('  found tool "%s"'%tool)
