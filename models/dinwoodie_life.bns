@@ -1,0 +1,98 @@
+# compuse, mci, meanws, numfir, numtrans, numwalks, oohhours, sleeplatency, sleeplivroom, timeasleep, ttib, waso, wscv, wsq3, wssigma
+
+.v 15
+
+# compuse
+.n 1 2 2 15
+-0 0
+1- 0
+01 1
+
+# mci
+.n 2 4 1 9 12 14
+-00- 0
+---1 0
+1--- 0
+0-10 1
+01-0 1
+
+# meanws
+.n 3 3 13 14 15
+1-0 0
+-0- 0
+-11 1
+01- 1
+
+# numfir
+.n 4 3 5 9 14
+001 0
+--0 1
+-1- 1
+1-- 1
+
+# numtrans
+.n 5 1 4
+0 0
+1 1
+
+# numwalks
+.n 6 2 13 15
+-0 0
+1- 0
+01 1
+
+# oohhours
+.n 7 4 4 6 9 11
+100- 0
+---1 0
+--10 1
+-1-0 1
+0--0 1
+
+# sleeplatency
+.n 8 2 11 12
+-0 0
+0- 0
+11 1
+
+# sleeplivroom
+.n 9 2 10 11
+-1 0
+0- 0
+10 1
+
+# timeasleep
+.n 10 1 11
+0 0
+1 1
+
+# ttib
+.n 11 1 10
+0 0
+1 1
+
+# waso
+.n 12 2 8 11
+-0 0
+0- 0
+11 1
+
+# wscv
+.n 13 3 2 3 15
+01- 0
+--0 0
+-01 1
+1-1 1
+
+# wsq3
+.n 14 3 2 3 6
+-01 0
+10- 0
+0-0 1
+-1- 1
+
+# wssigma
+.n 15 2 3 13
+-0 0
+0- 0
+11 1

@@ -1,0 +1,150 @@
+# AJUBA, AURKAActive, AURKAPresent, BORA, CDC25B, CDK1CCNBComplex, CentrosomeMat, Cytokinesis, ENSA, GSK3B, GWL_MASTL, HCPEB, MT, MTCanAct, NEDD9, PLK1, PP1, PP2A, STMN, STMNCanAct, SpindleAssembly, TPX2, WEE1, hCPEB
+
+.v 24
+
+# AJUBA
+.n 1 1 1
+0 0
+1 1
+
+# AURKAActive
+.n 2 7 1 2 3 4 15 17 22
+---00-0 0
+-1---1- 0
+0-----0 0
+--0---- 0
+1-1-10- 1
+1-11-0- 1
+101-1-- 1
+1011--- 1
+--1--01 1
+-01---1 1
+
+# AURKAPresent
+.n 3 1 18
+1 0
+0 1
+
+# BORA
+.n 4 3 8 10 16
+1-1 0
+10- 0
+-10 1
+0-- 1
+
+# CDC25B
+.n 5 3 2 8 16
+0-0 0
+-1- 0
+-01 1
+10- 1
+
+# CDK1CCNBComplex
+.n 6 4 5 8 23 24
+0-10 0
+-1-- 0
+-0-1 1
+-00- 1
+10-- 1
+
+# CentrosomeMat
+.n 7 2 6 21
+-1 0
+0- 0
+10 1
+
+# Cytokinesis
+.n 8 2 7 21
+-0 0
+1- 0
+01 1
+
+# ENSA
+.n 9 1 11
+0 0
+1 1
+
+# GSK3B
+.n 10 1 10
+0 0
+1 1
+
+# GWL_MASTL
+.n 11 2 6 18
+-1 0
+0- 0
+10 1
+
+# HCPEB
+.n 12 1 2
+0 0
+1 1
+
+# MT
+.n 13 1 19
+1 0
+0 1
+
+# MTCanAct
+.n 14 1 14
+0 0
+1 1
+
+# NEDD9
+.n 15 1 2
+0 0
+1 1
+
+# PLK1
+.n 16 5 2 13 14 19 20
+0-0-0 0
+0-01- 0
+00--0 0
+00-1- 0
+---01 1
+-11-- 1
+1---- 1
+
+# PP1
+.n 17 3 2 6 8
+--1 0
+-1- 0
+1-- 0
+000 1
+
+# PP2A
+.n 18 2 9 17
+-0 0
+1- 0
+01 1
+
+# STMN
+.n 19 1 2
+1 0
+0 1
+
+# STMNCanAct
+.n 20 1 20
+0 0
+1 1
+
+# SpindleAssembly
+.n 21 2 7 8
+-1 0
+0- 0
+10 1
+
+# TPX2
+.n 22 1 16
+0 0
+1 1
+
+# WEE1
+.n 23 1 16
+1 0
+0 1
+
+# hCPEB
+.n 24 1 24
+0 0
+1 1

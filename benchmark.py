@@ -19,8 +19,7 @@ def load_tools(folder='tools'):
         if not name.endswith(".py") and not name.startswith("_"):
             try:
                 filepath = os.path.join(basedir, name, 'config.py')
-                py_mod = imp.load_source('tools.%s' % name, filepath)
-                
+                py_mod = imp.load_source('tools/%s' % name, filepath)
                 if not py_mod.is_installed:
                     print(name, 'is not installed')
                     continue
@@ -61,8 +60,11 @@ def is_multivalued(model):
 
 def benchmark_tool_feature(tool, feat, models, outfolder):
     if tool not in tools: return
+    # variable "tools" is assumed to exist
+
     tool_features = tools[tool].features
     if feat not in tool_features: return
+
     launcher = tool_features[feat]
     if not os.path.exists( launcher): return
     if not os.path.exists(outfolder): os.makedirs(outfolder)
@@ -76,6 +78,7 @@ def benchmark_tool_feature(tool, feat, models, outfolder):
     with open( os.path.join(outfolder, 'timings.txt'), 'w' ) as timingfile:
         for model in models:
             
+            if not model.split(".")[1] == tools[tool].input_format: continue
             if is_multivalued(model) and not tool_accepts_multi: continue
             
             model_name = '__'.join(model.split('/'))
@@ -100,12 +103,12 @@ def load_models(folder='models'):
     return models
 
 
-def run_benchmarks(selected, models, runfolder, name):
+def run_benchmarks(selected_features, models, runfolder, name):
     this_runfolder = os.path.join(runfolder, name)
     if not os.path.exists(this_runfolder): os.makedirs(this_runfolder)
     
     done = set()
-    for target in selected:
+    for target in selected_features:
         if target in done:
             print('skip %s:%s' % target)
             continue

@@ -1,0 +1,80 @@
+
+
+COMMANDS:
+After downloading the file, you may need to change the file access permission to make it executable:
+
+    chmod +x bns 
+
+To run BNS in Linux or Windows Cygwin, use the command:
+
+    ./bns input_file 
+
+For example, if you use the Boolean network model of Arabidopsis thaliana as an input file, you will get the following output:
+
+    ./bns arabidopsis.cnet
+    101100110111011
+    Attractor 1 is of length 1
+
+    110110110011011
+    Attractor 2 is of length 1
+
+    100110110011011
+    Attractor 3 is of length 1
+
+    111100110111011
+    Attractor 4 is of length 1
+
+    010001000011100
+    Attractor 5 is of length 1
+
+    010001001011100
+    Attractor 6 is of length 1
+
+    001100110111011
+    Attractor 7 is of length 1
+
+    000110110011001
+    Attractor 8 is of length 1
+
+    000001000011100
+    Attractor 9 is of length 1
+
+    000001001011100
+    Attractor 10 is of length 1
+
+    The number of attractors is 10
+
+INPUT FORMAT:
+The input file starts with the statement:
+
+    .v number_of_vertices 
+
+which specifies the total number of vertices in the Boolean network. We assume that vertices are labeled from 1 to number_of_vertices.
+
+Then, the description of Boolean functions associated to vertices follows in the following format:
+
+    .n vertex's_label number_of_regulators list_of_labels_of_regulators
+    input_values output_value
+    ...
+    input_values output_value 
+
+For example, the description of a vertex labeled by 1 with two regulators labeled by 2 and 3, which has an associated function OR can be given as follows:
+
+    .n 1 2 2 3
+    00 0
+    01 1
+    10 1
+    11 1 
+
+Note, that it you need to enumerate both, the input assignments for which the function evaluates to 1, as well as the input the input assignments for which the function evaluates to 0.
+
+One can use the symbol "-" meaning "both 0 and 1" to reduce the description of the input part:
+
+    .n 1 2 2 3
+    00 0
+    -1 1
+    1- 1 
+
+A line which starts with "#" is commented out. Comments are useful for relating labels of vertices to the actual names of genes.
+
+As an example, see the input description of the Boolean network model of Arabidopsis thaliana. 
