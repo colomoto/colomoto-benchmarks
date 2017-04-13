@@ -93,8 +93,7 @@ ENV/
 .ropeproject
 
 
-# run output folder
-runs/**
-
-# local installation folder
+# local installation folder, run and plot outputs
 local/**
+runs/**
+plots/**

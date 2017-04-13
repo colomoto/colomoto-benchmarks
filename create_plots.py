@@ -4,6 +4,9 @@ import os
 import matplotlib
 import matplotlib.pyplot
 
+import benchmark
+
+benchmark.load_tools()
 
 def compute_ticks(Run):
     """
