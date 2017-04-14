@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 
+import os
 import sys
+
+# Add the local PyBoolNet to the python path
+folder = os.path.abspath(os.path.split(__file__)[0])
+pypath = os.path.join(folder, '..', 'source', 'PyBoolNet-2.1')
+sys.path.insert(0,pypath)
+
 import PyBoolNet
 
 if __name__ == '__main__':
@@ -8,6 +15,6 @@ if __name__ == '__main__':
     primes = PyBoolNet.FileExchange.bnet2primes(bnet)
     steadystates = PyBoolNet.TrapSpaces.steady_states(primes)
     steadystates = [PyBoolNet.StateTransitionGraphs.state2str(x) for x in steadystates]
-    print(','.join(steadystates))
+    print('\n'.join(steadystates))
 
 

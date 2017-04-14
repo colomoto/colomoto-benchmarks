@@ -1,0 +1,4 @@
+#!/bin/bash
+
+java -jar local/bioLQM.jar $1 -r stable
+

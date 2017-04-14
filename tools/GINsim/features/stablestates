@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo TODO: actually launch GINsim on "$1"
-

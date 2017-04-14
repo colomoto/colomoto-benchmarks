@@ -1,0 +1,4 @@
+#!/bin/bash
+
+java -jar local/bioLQM.jar $1 -r stableASP  | local/clingo-5.1.0-linux-x86_64/clingo
+
