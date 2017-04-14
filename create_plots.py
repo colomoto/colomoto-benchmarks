@@ -108,21 +108,17 @@ if __name__=="__main__":
             data = read_data(os.path.join("runs",run,job), tick_names)
 
             if data:
-                matplotlib.pyplot.plot(tick_numbers, data, label=tool, marker='o', linewidth=3)
+                matplotlib.pyplot.plot(tick_numbers, data, label=(tool,feature), marker='o', linewidth=3)
             else:
                 print('  missing "timings.txt" for %s %s'%(tool,feature))
-            
 
             print('  found tool "%s"'%tool)
-            
 
-        matplotlib.pyplot.legend()
+        matplotlib.pyplot.legend(loc=9, bbox_to_anchor=(0.5, -0.6), ncol=2)
         matplotlib.pyplot.tight_layout()
 
         fname = os.path.join("plots",run+".pdf")
         figure.savefig(fname)
         print('  created plot "%s"'%fname)
-
-
 
 
